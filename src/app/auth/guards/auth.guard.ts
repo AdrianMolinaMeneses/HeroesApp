@@ -15,14 +15,22 @@ import { AuthService } from '../services/auth.service';
 export class AuthGuard implements CanMatch, CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
-  private checkAuthStatus(): boolean | Observable<boolean> {
-    return this.authService.checkAuthentication().pipe(
-      tap((isAuthenticated) => {
-        if (!isAuthenticated) {
-          this.router.navigate(['./auth/login']);
-        }
-      })
-    );
+  // private checkAuthStatus(): boolean | Observable<boolean> {
+  //   return this.authService.checkAuthentication().pipe(
+  //     tap((isAuthenticated) => {
+  //       if (!isAuthenticated) {
+  //         this.router.navigate(['./auth/login']);
+  //       }
+  //     })
+  //   );
+  // }
+
+  private checkAuthStatus(): boolean {
+    if (!this.authService.checkAuthentication()) {
+      this.router.navigate(['./auth/login']);
+    }
+
+    return true;
   }
 
   canActivate(
