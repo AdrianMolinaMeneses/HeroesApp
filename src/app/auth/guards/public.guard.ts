@@ -15,15 +15,23 @@ import { map, Observable, tap } from 'rxjs';
 export class PublicGuard implements CanMatch, CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
-  private checkAuthStatus(): boolean | Observable<boolean> {
-    return this.authService.checkAuthentication().pipe(
-      tap((isAuthenticated) => {
-        if (isAuthenticated) {
-          this.router.navigate(['./']);
-        }
-      }),
-      map((isAuthenticated) => !isAuthenticated)
-    );
+  // private checkAuthStatus(): boolean | Observable<boolean> {
+  //   return this.authService.checkAuthentication().pipe(
+  //     tap((isAuthenticated) => {
+  //       if (isAuthenticated) {
+  //         this.router.navigate(['/']);
+  //       }
+  //     }),
+  //     map((isAuthenticated) => !isAuthenticated)
+  //   );
+  // }
+
+  private checkAuthStatus(): boolean {
+    if (this.authService.checkAuthentication()) {
+      this.router.navigate(['/']);
+    }
+
+    return true;
   }
 
   canActivate(

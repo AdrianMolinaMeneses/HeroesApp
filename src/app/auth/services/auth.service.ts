@@ -25,16 +25,23 @@ export class AuthService {
     );
   }
 
-  checkAuthentication(): Observable<boolean> {
-    if (!localStorage.getItem('token')) return of(false);
-
+  //checkAuthentication(): Observable<boolean> {
+  checkAuthentication(): boolean {
+    //if (!localStorage.getItem('token')) return of(false);
     const token = localStorage.getItem('token');
 
-    return this.http.get<User>(`${this.baseUrl}/1`).pipe(
-      tap((user) => (this.user = user)),
-      map((user) => !!user),
-      catchError((err) => of(false))
-    );
+    if (token) {
+      this.http
+        .get<User>(`${this.baseUrl}/1`)
+        .subscribe((user) => (this.user = user));
+    }
+
+    return token != null;
+    // return this.http.get<User>(`${this.baseUrl}/1`).pipe(
+    //   tap((user) => (this.user = user)),
+    //   map((user) => !!user),
+    //   catchError((err) => of(false))
+    // );
   }
 
   logout(): void {
